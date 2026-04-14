@@ -418,13 +418,13 @@ def fanggen13():
     """
     x=int(input())
     for i in range(x):
-        if i**2>x:
+        if i*i>x:
             print(i-1)
             break
-        if i**2==x:
+        if i*i==x:
             print(i)
             break
-        if i**2<x:
+        if i*i<x:
             continue
 def louti14():
     """
@@ -654,9 +654,10 @@ def excel20():
        22:'V',23:'W',24:'X',25:'Y',26:'Z'}
     while True:
         if a>26:
+            a-=1
             x=a%26
             a=a//26
-            m.append(h[x])
+            m.append(h[x+1])
             continue
         else:
             m.append(h[a])
@@ -889,11 +890,12 @@ def cuntong26():
         if nums[i] in nums[i+1:len(nums)]:
             c=[]
             c.append(i)
-            for j in range(len(nums[i+1:len(nums)])):
-                if nums[j+i+1]==nums[i]:
-                    c.append(j+i+1)
-                    break
-            b.append(c)
+            # for j in range(len(nums[i+1:len(nums)])):
+            #     if nums[j+i+1]==nums[i]:
+            #         c.append(j+i+1)
+            #         break
+            c.append(nums.index(nums[i], i + 1, len(nums)))
+            b.append(c[:])
     q=b[0][1]-b[0][0]
     for i in range(len(b)):
         if (b[i][1]-b[i][0])<q:
@@ -931,34 +933,33 @@ def huizong27():
     [8,9] --> "8->9"
     """
     exec(input("格式： nums = 列表 :"), globals())
-    print('["',end='')
-    d=0
+    if not nums:
+        print('[]')
+        return
+    z = ['["']
+    d = 0
     for i in range(len(nums)):
-        if i==len(nums)-1:
-            if d==0 or d==1:
-                print(f'{nums[-1]}',end='')
-            if d==-1:
-                print(f'->{nums[-1]}',end='')
+        if i == len(nums) - 1:
+            z.append(str(nums[-1]))
             break
-        if d==0:
-            print(f'{nums[i]}',end='')
-            d=-1
-        if d==-1:
-            if nums[i+1]==nums[i]+1:
-                print("->",end='')
-                d=1
+        if d == 0:
+            z.append(str(nums[i]))
+            if nums[i + 1] == nums[i] + 1:
+                z.append('->')
+                d = 1
                 continue
             else:
-                print('","',end='')
-                d=0
+                z.append('","')
+                d = 0
                 continue
-        if d==1:
-            if nums[i+1]==nums[i]+1:
+        if d == 1:
+            if nums[i + 1] == nums[i] + 1:
                 continue
             else:
-                print(f'{nums[i]}","',end='')
-                d=0
-    print('"]',end='')
+                z.append(str(nums[i]) + '","')
+                d = 0
+    z.append('"]')
+    print(eval(''.join(z)))
 def mi28():
     """
     给你一个整数 n，请你判断该整数是否是 2 的幂次方。
@@ -1202,20 +1203,22 @@ def wuchong36():
     """
     s=input()
     def main(s):
-        c=[];b=1;z=0
+        c = []
+        b = 0
+        z = 0
         for i in s:
             if i not in c:
                 c.append(i)
-                b+=1
-                continue
+                b += 1
             else:
-                if b>z:
-                    z=b
-                b=1;c=[]
+                if b > z:
+                    z = b
+                y = c.index(i)
+                c = c[y + 1:]
                 c.append(i)
-                continue
-        if b>0 and z==0:
-            z=b
+                b -= y
+        if b > z:
+            z = b
         return z
     print(f'{main(s)}')
 def huiwen37():
@@ -1232,29 +1235,57 @@ def huiwen37():
     输出："bb"
     """
     s=input()
-    # def pan(ss):
-    #     for i in range(0, len(ss) // 2):
-    #         if ss[i] == ss[len(ss) - 1 - i]:
-    #             continue
-    #         else:
-    #             return False
-    #     return True
-    def pan(ss):
-        if ss==ss[::-1]:
-            return True
-        else:
-            return False
-    b=1;zz=''
-    if len(s)==1:
-        b=1;zz=s
-    for i in range(len(s)):
-        for j in range(i+1,len(s)):
-            ss=s[i:j+1]
-            if pan(ss):
-                if len(ss)>=b:
-                    b=len(ss)
-                    zz=ss
-    print(f'{zz}')
+    def main(s):
+        def pan(ss):
+            if ss == ss[::-1]:
+                return True
+            else:
+                return Fals
+        b=1;zz=s[0]
+        if len(s)==1:
+            b=1;zz=s
+        for i in range(len(s)):
+            for j in range(i+1,len(s)):
+                ss=s[i:j+1]
+                if pan(ss):
+                    if len(ss)>=b:
+                        b=len(ss)
+                        zz=ss
+        return zz
+    def main2(s):
+        def pan2(l1,l2):
+            while l1>=0 and l2<len(s) and s[l1]==s[l2]:
+                l1-=1;l2+=1
+            return l1+1, l2-1
+        ml=0;mr=0
+        for i in range(len(s)):
+            l,r=pan2(i,i)
+            if r-l>mr-ml:
+                ml,mr=l,r
+            l,r=pan2(i,i+1)
+            if r-l>mr-ml:
+                ml,mr=l,r
+        return s[ml:mr+1]
+    def main3(s):
+        ss='_' + '_'.join(s) + '_'
+        p=[0 for i in range(len(ss))]
+        r=0;c=0;l=1
+        mx=0;ll=1
+        p[0]=1
+        for i in range(1,len(ss)):
+            p[i]=min(p[2*c-i],r-i) if i<r else 1
+            while i-p[i]>=0 and i+p[i]<len(ss):
+                if ss[i-p[i]] != ss[i+p[i]]:
+                    break
+                p[i]+=1
+            if i+p[i]>r:
+                c=i;r=i+p[i]
+            if 2*p[i]-1>l:
+                l=2*p[i]-1
+                mx=i;ll=p[i]-1
+        x=(mx-(p[mx]-1)+1)//2
+        return s[x:x+ll]
+    print(main3(s))
 def zzi38():
     """
     将一个给定字符串 s 根据给定的行数 numRows ，
@@ -2745,4 +2776,4 @@ def lujing72():
     """
 
 if __name__=='__main__':
-    jiaocuo71new()
+    huiwen37()
