@@ -3372,17 +3372,27 @@ def chengji79():
     解释: 结果不能为 2, 因为 [-2,-1] 不是子数组。
     """
     def maxProduct(self, nums: List[int]) -> int:
-        l=len(nums)
-        if l==1:
-            return nums[0]
-        z=-999999
-        for i in range(l-1):
-            x=nums[i]
-            z=max(z,x)
-            for j in range(i+1,l):
-                x*=nums[j]
+        def one(nums):
+            l=len(nums)
+            if l==1:
+                return nums[0]
+            z=-999999
+            for i in range(l-1):
+                x=nums[i]
                 z=max(z,x)
-        z=max(z,nums[-1])
-        return z
+                for j in range(i+1,l):
+                    x*=nums[j]
+                    z=max(z,x)
+            z=max(z,nums[-1])
+            return z
+        def two(nums):
+            mx = mn = r = nums[0]
+            for i in range(1, len(nums)):
+                if nums[i] < 0:
+                    mx, mn = mn, mx
+                mx = max(nums[i], mx * nums[i])
+                mn = min(nums[i], mn * nums[i])
+                r = max(r, mx)
+            return r
 if __name__=='__main__':
     jiayou75()
