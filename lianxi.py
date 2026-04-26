@@ -3455,5 +3455,124 @@ def banben80():
             elif x<y:
                 return -1
         return 0
+def chufa81():
+    """
+    给定两个整数，分别表示分数的分子 numerator 和分母 denominator，以 字符串形式返回小数
+    如果小数部分为循环小数，则将循环的部分括在括号内。
+    如果存在多个答案，只需返回 任意一个 。
+    对于所有给定的输入，保证 答案字符串的长度小于 104 。
+    注意，如果分数可以表示为有限长度的字符串，则 必须 返回它。
+
+    示例 1：
+    输入：numerator = 1, denominator = 2
+    输出："0.5"
+
+    示例 2：
+    输入：numerator = 2, denominator = 1
+    输出："2"
+
+    示例 3：
+    输入：numerator = 4, denominator = 333
+    输出："0.(012)"
+    """
+    def fractionToDecimal(self, numerator: int, denominator: int) -> str:
+        n=numerator;d=denominator
+        # getcontext().prec=50
+        # gg=math.gcd(n,d)
+        # n=n//gg;d=d//gg
+        # while d%2==0:
+        #     d//=2
+        #     n=Decimal(n)/Decimal(2)
+        # while d%5==0:
+        #     d//=5
+        #     n=Decimal(n)/Decimal(5)
+        # l=[]
+        # if n<0 and d<0:
+        #     n=-n;d=-d
+        # if n<0:
+        #     n=-n
+        #     l=['-']
+        # if d<0:
+        #     d=-d
+        #     l=['-']
+        # if n==0:
+        #     return '0'
+        # if d==1:
+        #     return ''.join(l+[str(n)])
+        # x=Decimal(n)/Decimal(d)
+        # l=l+list(str(x).split('.'))
+        # x=l[-1][:-1]
+        # l=l[:-1]+['.']
+        # def ff(s):
+        #     i=(s+s).find(s,1)
+        #     return s[:i] if i!=-1 else s
+        # while True:
+        #     if len(ff(x))==len(x):
+        #         l=l+[x[0]]
+        #         x=x[1:]
+        #         continue
+        #     else:
+        #         y='('+ff(x)+')'
+        #         l=l+[y]
+        #         break
+        # return ''.join(l)
+
+        if n==0:
+            return '0'
+        z=[]
+        if (n<0)^(d<0):
+            z.append('-')
+        n=abs(n);d=abs(d)
+        z.append(str(n//d))
+        r=n%d
+        if r==0:
+            return ''.join(z)
+        z.append('.')
+        p={}
+        while r!=0:
+            if r in p:
+                i=p[r]
+                z.insert(i,'(')
+                z.append(')')
+                return ''.join(z)
+            p[r]=len(z)
+            r*=10
+            z.append(str(r//d))
+            r%=d
+        return ''.join(z)
+def erhe82():
+    """
+    给你一个下标从 1 开始的整数数组 numbers ，该数组已按 非递减顺序排列  ，
+    请你从数组中找出满足相加之和等于目标数 target 的两个数。
+    如果设这两个数分别是 numbers[index1] 和 numbers[index2] ，则 1 <= index1 < index2 <= numbers.length 。
+    以长度为 2 的整数数组 [index1, index2] 的形式返回这两个整数的下标 index1 和 index2。
+    你可以假设每个输入 只对应唯一的答案 ，而且你 不可以 重复使用相同的元素。
+    你所设计的解决方案必须只使用常量级的额外空间。
+
+    示例 1：
+    输入：numbers = [2,7,11,15], target = 9
+    输出：[1,2]
+    解释：2 与 7 之和等于目标数 9 。因此 index1 = 1, index2 = 2 。返回 [1, 2] 。
+
+    示例 2：
+    输入：numbers = [2,3,4], target = 6
+    输出：[1,3]
+    解释：2 与 4 之和等于目标数 6 。因此 index1 = 1, index2 = 3 。返回 [1, 3] 。
+
+    示例 3：
+    输入：numbers = [-1,0], target = -1
+    输出：[1,2]
+    解释：-1 与 0 之和等于目标数 -1 。因此 index1 = 1, index2 = 2 。返回 [1, 2] 。
+    """
+    def twoSum(self, numbers: List[int], target: int) -> List[int]:
+        x=0;y=len(numbers)-1
+        while x<y:
+            if numbers[x]+numbers[y]==target:
+                return [x+1,y+1]
+            else:
+                if numbers[x] + numbers[y] > target:
+                    y-=1
+                else:
+                    x+=1
 if __name__=='__main__':
     jiayou75()
