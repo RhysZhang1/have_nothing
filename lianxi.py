@@ -3574,5 +3574,58 @@ def erhe82():
                     y-=1
                 else:
                     x+=1
+def weiling83():
+    """
+    给定一个整数 n ，返回 n! 结果中尾随零的数量。
+    提示 n! = n * (n - 1) * (n - 2) * ... * 3 * 2 * 1
+
+    示例 1：
+    输入：n = 3
+    输出：0
+    解释：3! = 6 ，不含尾随 0
+
+    示例 2：
+    输入：n = 5
+    输出：1
+    解释：5! = 120 ，有一个尾随 0
+
+    示例 3：
+    输入：n = 0
+    输出：0
+    """
+    def trailingZeroes(self, n: int) -> int:
+        # def p(n):
+        #     a=0
+        #     while n%2==0:
+        #         n//=2;a+=1
+        #     b=0
+        #     while n%5==0:
+        #         n//=5;b+=1
+        #     return a,b
+        # m=0;mm=0
+        # for i in range(2,n+1):
+        #     x,y=p(i)
+        #     m+=x;mm+=y
+        # return min(m,mm)
+
+        a=0;b=5
+        while n>=b:
+            a+=n//b
+            b*=5
+        return a
+    n=int(input())
+    print(trailingZeroes(n))
+def jiezheng84():
+    """整数阶乘的最后一个非零数"""
+    n=int(input())
+    s=[1,1,2,6,4]
+    t=[6,2,4,8]
+    r=1
+    while n>0:
+        r=(r*s[n%5])%10
+        n=n//5
+        if n>0:
+            r=(r*t[n%4])%10
+    print(r)
 if __name__=='__main__':
     jiayou75()
