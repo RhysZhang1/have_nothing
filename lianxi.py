@@ -5,7 +5,7 @@ import time
 import copy
 import itertools
 from itertools import product
-
+from collections import defaultdict
 from numpy.ma.core import append
 
 
@@ -3627,5 +3627,47 @@ def jiezheng84():
         if n>0:
             r=(r*t[n%4])%10
     print(r)
+def zuida84():
+    """
+    给定一组非负整数 nums，重新排列每个数的顺序（每个数不可拆分）使之组成一个最大的整数。
+    注意：输出结果可能非常大，所以你需要返回一个字符串而不是整数。
+
+    示例 1：
+    输入：nums = [10,2]
+    输出："210"
+
+    示例 2：
+    输入：nums = [3,30,34,5,9]
+    输出："9534330"
+    """
+    # def largestNumber(nums: list[int]) -> str:
+    #     def fen(n):
+    #         g=defaultdict(list)
+    #         for i in n:
+    #             l=len(str(i))
+    #             g[l].append(i)
+    #         return {a:sorted(b,reverse=True) for a,b in g.items()}
+    #     g=fen(nums)
+    #     a=[_ for _ in g]
+    #     z=[]
+    #     a.sort(reverse=True)
+    #     for i in a:
+    #         z=z+g[a]
+    #     return ''.join(map(str,z))
+    # nums=eval(input())
+    # print(largestNumber(nums))
+    class Solution:
+        def largestNumber(self, nums: List[int]) -> str:
+            def c(a, b):
+                sa, sb = str(a), str(b)
+                if sa + sb > sb + sa:
+                    return -1
+                elif sa + sb < sb + sa:
+                    return 1
+                return 0
+
+            nums.sort(key=cmp_to_key(c))
+            z = ''.join(map(str, nums))
+            return '0' if z[0] == '0' else z
 if __name__=='__main__':
-    jiayou75()
+    zuida84()
