@@ -3686,6 +3686,55 @@ def jieshe85():
     解释：偷窃 1 号房屋 (金额 = 2), 偷窃 3 号房屋 (金额 = 9)，接着偷窃 5 号房屋 (金额 = 1)。
      偷窃到的最高金额 = 2 + 9 + 1 = 12 。
     """
-    
+    def rob(nums: List[int]) -> int:
+        def one(nums):
+            l = len(nums)
+            if l == 0:
+                return 0
+            if l == 1:
+                return nums[0]
+            def h(i):
+                if i >= l:
+                    return 0
+                return nums[i] + max(h(i + 2), h(i + 3))
+            return max(h(0), h(1))
+        def two(nums):
+            l = len(nums)
+            if l == 0:
+                return 0
+            if l == 1:
+                return nums[0]
+            m = {}
+            def h(i):
+                if i >= l:
+                    return 0
+                if i in m:
+                    return m[i]
+                m[i] = nums[i] + max(h(i + 2), h(i + 3))
+                return m[i]
+            return max(h(0), h(1))
+        def three(nums):
+            if not nums:
+                return 0
+            l = len(nums)
+            if l == 1:
+                return nums[0]
+            d = [0 for i in range(l)]
+            d[0] = nums[0]
+            d[1] = max(nums[0], nums[1])
+            for i in range(2, l):
+                d[i] = max(d[i - 1], d[i - 2] + nums[i])
+            return d[-1]
+        def four(nums):
+            if not nums:
+                return 0
+            p2 = 0
+            p1 = nums[0]
+            for i in range(1, len(nums)):
+                c = max(p1, p2 + nums[i])
+                p2 = p1
+                p1 = c
+            return p1
+        return four(nums)
 if __name__=='__main__':
     zuida84()
