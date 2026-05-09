@@ -4338,5 +4338,86 @@ def tiaoyue92():
                         ed[p].clear()
                 q = q2
                 re += 1
+def xuanzhuan93():
+    """
+    给你一个大小为 m x n 的整数矩阵 grid，其中 m 和 n 都是 偶数 ；另给你一个整数 k
+    矩阵由若干层组成，如下图所示，每种颜色代表一层：
+    矩阵的循环轮转是通过分别循环轮转矩阵中的每一层完成的。
+    在对某一层进行一次循环旋转操作时，层中的每一个元素将会取代其 逆时针 方向的相邻元素。
+    返回执行 k 次循环轮转操作后的矩阵。
+
+    示例 1
+    输入：grid = [[40,10],[30,20]], k = 1
+    输出：[[10,20],[40,30]]
+
+    示例 2：
+    输入：grid = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,16]], k = 2
+    输出：[[3,4,8,12],[2,11,10,16],[1,7,6,15],[5,9,13,14]]
+    """
+    def rotateGrid(self, grid: List[List[int]], k: int) -> List[List[int]]:
+        def one(grid,k):
+            m=len(grid)
+            n=len(grid[0])
+            l=min(m,n)//2
+            for i in range(l):
+                p=(m-2*i)*2+(n-2*i)*2-4
+                kk=k if k<p else k%p
+                for _ in range(kk):
+                    be=grid[i][i]
+                    for j in range(1+i,n-i):
+                        grid[i][j-1]=grid[i][j]
+                    for j in range(1+i,m-i):
+                        grid[j-1][-1-i]=grid[j][-1-i]
+                    for j in range(n-i-1,i,-1):
+                        grid[-1-i][j]=grid[-1-i][j-1]
+                    for j in range(m-i-1,i,-1):
+                        grid[j][i]=grid[j-1][i]
+                    grid[i+1][i]=be
+            return grid
+        return one(grid,k)
+def jieshe94():
+    """
+    你是一个专业的小偷，计划偷窃沿街的房屋，每间房内都藏有一定的现金。这个地方所有的房屋都 围成一圈 ，这意味着第一个房屋和最后一个房屋是紧挨着的。
+    同时，相邻的房屋装有相互连通的防盗系统，如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警 。
+    给定一个代表每个房屋存放金额的非负整数数组，计算你 在不触动警报装置的情况下 ，今晚能够偷窃到的最高金额。
+
+    示例 1：
+    输入：nums = [2,3,2]
+    输出：3
+    解释：你不能先偷窃 1 号房屋（金额 = 2），然后偷窃 3 号房屋（金额 = 2）, 因为他们是相邻的。
+    示例 2：
+    输入：nums = [1,2,3,1]
+    输出：4
+    解释：你可以先偷窃 1 号房屋（金额 = 1），然后偷窃 3 号房屋（金额 = 3）。
+         偷窃到的最高金额 = 1 + 3 = 4 。
+    示例 3：
+    输入：nums = [1,2,3]
+    输出：3
+    """
+    def rob(nums: List[int]) -> int:
+        n = len(nums)
+        if n == 0:
+            return 0
+        if n == 1:
+            return nums[0]
+        if n == 2 or n == 3:
+            return max(nums)
+        if n == 4:
+            return max(nums[0] + nums[2], nums[1] + nums[3])
+        z = []
+        for i in range(2):
+            num = nums[1:] if i == 1 else nums[:len(nums) - 1]
+
+            def tou(nums):
+                p2 = 0
+                p1 = nums[0]
+                for i in range(1, len(nums)):
+                    c = max(p1, p2 + nums[i])
+                    p2 = p1
+                    p1 = c
+                return p1
+
+            z.append(tou(num))
+        return max(z)
 if __name__=='__main__':
     zuida84()
