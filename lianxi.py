@@ -4465,5 +4465,129 @@ def zuhe95():
 
         h(1, k, n, [])
         return zz
+def zhengfang96():
+    """
+    在一个由 '0' 和 '1' 组成的二维矩阵内，找到只包含 '1' 的最大正方形，并返回其面积。
+
+    示例 1：
+    输入：matrix = [["1","0","1","0","0"],["1","0","1","1","1"],["1","1","1","1","1"],["1","0","0","1","0"]]
+    输出：4
+
+    示例 2：
+    输入：matrix = [["0","1"],["1","0"]]
+    输出：1
+
+    示例 3：
+    输入：matrix = [["0"]]
+    输出：0
+    """
+    def maximalSquare(matrix: List[List[str]]) -> int:
+        def one(matrix):
+            m=0;n=0
+            b=0;xh=0
+            p=0;q=-1
+            z=0
+            m=len(matrix);n=len(matrix[0])
+            def ch(p,q,matrix):
+                for i in range(q+1,len(matrix[0])):
+                    if matrix[p][i]=='1':
+                        return p,i
+                for i in range(p+1,len(matrix)):
+                    for j in range(0,len(matrix[0])):
+                        if matrix[i][j]=='1':
+                            return i,j
+                return -1,-1
+            while 1:
+                p,q=ch(p,q,matrix)
+                if p==-1 and q==-1:
+                    return z*z
+                z=max(1,z)
+                xh=min(m-p,n-q)
+                bb=0
+                for i in range(1,xh+1):
+                    for j in range(i+1):
+                        if p+i<m and p+j<m and q+i<n and q+j<n:
+                            if matrix[p+j][q+i]=='1' and matrix[p+i][q+j]=='1':
+                                continue
+                            else:
+                                bb=1;break
+                        else:
+                            bb=1;break
+                    if bb==0:
+                        z=max(z,i+1)
+                    else:
+                        break
+        def two(matrix):
+            m=len(matrix);n=len(matrix[0])
+            dp=[[0]*n for i in range(m)]
+            z=0
+            for i in range(m):
+                for j in range(n):
+                    if matrix[i][j]=='1':
+                        if i==0 or j==0:
+                            dp[i][j]=1
+                        else:
+                            dp[i][j]=min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1])+1
+                        z=max(z,dp[i][j])
+            return z*z
+        return two(matrix)
+def nengliang97():
+    """
+    给你一个任务数组 tasks ，其中 tasks[i] = [actuali, minimumi] ：
+    actuali 是完成第 i 个任务 需要耗费 的实际能量。
+    minimumi 是开始第 i 个任务前需要达到的最低能量。
+    比方说，如果任务为 [10, 12] 且你当前的能量为 11 ，那么你不能开始这个任务。
+    如果你当前的能量为 13 ，你可以完成这个任务，且完成它后剩余能量为 3 。
+    你可以按照 任意顺序 完成任务。
+    请你返回完成所有任务的 最少 初始能量。
+
+    示例 1：
+    输入：tasks = [[1,2],[2,4],[4,8]]
+    输出：8
+    解释：
+    一开始有 8 能量，我们按照如下顺序完成任务：
+        - 完成第 3 个任务，剩余能量为 8 - 4 = 4 。
+        - 完成第 2 个任务，剩余能量为 4 - 2 = 2 。
+        - 完成第 1 个任务，剩余能量为 2 - 1 = 1 。
+    注意到尽管我们有能量剩余，但是如果一开始只有 7 能量是不能完成所有任务的，因为我们无法开始第 3 个任务。
+
+    示例 2：
+    输入：tasks = [[1,3],[2,4],[10,11],[10,12],[8,9]]
+    输出：32
+    解释：
+    一开始有 32 能量，我们按照如下顺序完成任务：
+        - 完成第 1 个任务，剩余能量为 32 - 1 = 31 。
+        - 完成第 2 个任务，剩余能量为 31 - 2 = 29 。
+        - 完成第 3 个任务，剩余能量为 29 - 10 = 19 。
+        - 完成第 4 个任务，剩余能量为 19 - 10 = 9 。
+        - 完成第 5 个任务，剩余能量为 9 - 8 = 1 。
+
+    示例 3：
+    输入：tasks = [[1,7],[2,8],[3,9],[4,10],[5,11],[6,12]]
+    输出：27
+    解释：
+    一开始有 27 能量，我们按照如下顺序完成任务：
+        - 完成第 5 个任务，剩余能量为 27 - 5 = 22 。
+        - 完成第 2 个任务，剩余能量为 22 - 2 = 20 。
+        - 完成第 3 个任务，剩余能量为 20 - 3 = 17 。
+        - 完成第 1 个任务，剩余能量为 17 - 1 = 16 。
+        - 完成第 4 个任务，剩余能量为 16 - 4 = 12 。
+        - 完成第 6 个任务，剩余能量为 12 - 6 = 6 。
+    """
+    def minimumEffort(tasks: List[List[int]]) -> int:
+        nu=sorted(tasks,key=lambda x:(x[1]-x[0],x[1]),reverse=True)
+        z=0
+        c=0
+        for i in range(len(nu)-2,-1,-1):
+            m=nu[i+1][0] if i==len(nu)-2 else z
+            if nu[i][0]+m>=nu[i][1]:
+                z+=nu[i][0]
+            else:
+                z=nu[i][1]
+            c+=nu[i][0]
+        if z-c<nu[-1][1]:
+            z=nu[-1][1]+c
+        return z
+
 if __name__=='__main__':
     zuida84()
