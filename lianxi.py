@@ -5009,5 +5009,66 @@ def qiangong105():
             g.add(B[i])
             C[i]=(i+1)*2-len(g)
         return C
+def qianzhui06():
+    """
+    给你两个 正整数 数组 arr1 和 arr2 。
+    正整数的 前缀 是其 最左边 的一位或多位数字组成的整数。
+    例如，123 是整数 12345 的前缀，而 234 不是 。
+    设若整数 c 是整数 a 和 b 的 公共前缀 ，那么 c 需要同时是 a 和 b 的前缀。
+    例如，5655359 和 56554 有公共前缀 565 和 5655，而 1223 和 43456 没有 公共前缀。
+    你需要找出属于 arr1 的整数 x 和属于 arr2 的整数 y 组成的所有数对 (x, y) 之中最长的公共前缀的长度。
+    返回所有数对之中最长公共前缀的长度。如果它们之间不存在公共前缀，则返回 0 。
+
+    示例 1：
+    输入：arr1 = [1,10,100], arr2 = [1000]
+    输出：3
+    解释：存在 3 个数对 (arr1[i], arr2[j]) ：
+    - (1, 1000) 的最长公共前缀是 1 。
+    - (10, 1000) 的最长公共前缀是 10 。
+    - (100, 1000) 的最长公共前缀是 100 。
+    最长的公共前缀是 100 ，长度为 3 。
+    示例 2：
+    输入：arr1 = [1,2,3], arr2 = [4,4,4]
+    输出：0
+    解释：任何数对 (arr1[i], arr2[j]) 之中都不存在公共前缀，因此返回 0 。
+    请注意，同一个数组内元素之间的公共前缀不在考虑范围内。d
+    """
+    def longestCommonPrefix(arr1: List[int], arr2: List[int]) -> int:
+        def one(arr1, arr2):
+            z = 0
+            for i in arr1:
+                for j in arr2:
+                    ii = str(i)
+                    jj = str(j)
+                    l = min(len(ii), len(jj))
+                    # for k in range(1,l+1):
+                    #     if ii[:k]==jj[:k]:
+                    #         z=max(z,k)
+                    k = 0
+                    while k < l and ii[k] == jj[k]:
+                        k += 1
+                    z = max(z, k)
+            return z
+
+        def two(arr1, arr2):
+            # 1. 收集 arr1 中每个数字的所有前缀
+            prefixes = set()
+            for num in arr1:
+                s = str(num)
+                for i in range(1, len(s) + 1):
+                    prefixes.add(s[:i])
+
+            # 2. 在 arr2 中寻找最长匹配前缀
+            max_len = 0
+            for num in arr2:
+                s = str(num)
+                # 从长到短检查，找到即停止
+                for i in range(len(s), max_len, -1):  # 如果当前长度不大于 max_len 就可以提前停止
+                    if s[:i] in prefixes:
+                        max_len = i
+                        break
+            return max_len
+
+        return two(arr1, arr2)
 if __name__=='__main__':
     zuida84()
