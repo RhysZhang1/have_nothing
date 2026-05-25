@@ -5316,5 +5316,57 @@ def tiaoyue110():
                 ans=max(ans,t(i))
             return ans
         return two(arr,d)
+def tiaoba111():
+    """
+    给你一个下标从 0 开始的二进制字符串 s 和两个整数 minJump 和 maxJump 。一开始，你在下标 0 处，且该位置的值一定为 '0' 。
+    当同时满足如下条件时，你可以从下标 i 移动到下标 j 处：
+    i + minJump <= j <= min(i + maxJump, s.length - 1) 且
+    s[j] == '0'.
+    如果你可以到达 s 的下标 s.length - 1 处，请你返回 true ，否则返回 false 。
+
+    示例 1：
+    输入：s = "011010", minJump = 2, maxJump = 3
+    输出：true
+    解释：
+    第一步，从下标 0 移动到下标 3 。
+    第二步，从下标 3 移动到下标 5 。
+    示例 2：
+    输入：s = "01101110", minJump = 2, maxJump = 3
+    输出：false
+    """
+    def canReach(s: str, minJump: int, maxJump: int) -> bool:
+        if s[-1]=='1':
+            return False
+        def one():
+            m={}
+            def t(i):
+                if i==len(s)-1:
+                    return True
+                if i in m:
+                    return m[i]
+                for j in range(min(i+maxJump,len(s)-1),i+minJump-1,-1):
+                    if s[j]=='0' and t(j):
+                        m[i]=True
+                        return True
+                m[i]=False
+                return False
+            return t(0)
+        def two():
+            n=len(s)
+            dp=[False]*n
+            dp[0]=True
+            p=[0]*n
+            p[0]=1
+            for i in range(1,n):
+                if s[i]=='0':
+                    l=i-maxJump
+                    r=i-minJump
+                    if r>=0:
+                        c=p[r]-(p[l-1] if l>0 else 0)
+                        if c>0:
+                            dp[i]=True
+                p[i]=p[i-1]+(1 if dp[i] else 0)
+            return dp[-1]
+        return two()
 if __name__=='__main__':
     zuida84()
