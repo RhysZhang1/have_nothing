@@ -5516,7 +5516,7 @@ def canshu119():
     secret.length == guess.length
     secret 和 guess 仅由数字组成
     """
-    def getHint(self, secret: str, guess: str) -> str:
+    def getHint(secret: str, guess: str) -> str:
         l=len(secret)
         s=[i for i in str(secret)]
         g=[i for i in str(guess)]
@@ -5536,6 +5536,66 @@ def canshu119():
 
         y=len(list_intersection(s,g))-x
         return f'{x}A{y}B'
+def leihe120():
+    """
+    累加数 是一个字符串，组成它的数字可以形成累加序列。
+    一个有效的 累加序列 必须 至少 包含 3 个数。除了最开始的两个数以外，序列中的每个后续数字必须是它之前两个数字之和。
+    给你一个只包含数字 '0'-'9' 的字符串，编写一个算法来判断给定输入是否是 累加数 。如果是，返回 true ；否则，返回 false 。
+    说明：累加序列里的数，除数字 0 之外，不会 以 0 开头，所以不会出现 1, 2, 03 或者 1, 02, 3 的情况。
+
+    示例 1：
+    输入："112358"
+    输出：true
+    解释：累加序列为: 1, 1, 2, 3, 5, 8 。1 + 1 = 2, 1 + 2 = 3, 2 + 3 = 5, 3 + 5 = 8
+    示例 2：
+    输入："199100199"
+    输出：true
+    解释：累加序列为: 1, 99, 100, 199。1 + 99 = 100, 99 + 100 = 199
+
+    提示：
+
+    1 <= num.length <= 35
+    num 仅由数字（0 - 9）组成
+    """
+    def isAdditiveNumber(num):
+        n = len(num)
+
+        # 枚举第一个数的长度 len1
+        for len1 in range(1, n // 2 + 1):
+            # 前导零检查
+            if num[0] == '0' and len1 > 1:
+                break  # 第一个数以0开头，后面无需再试更长的
+
+            # 枚举第二个数的长度 len2
+            # 第三个数长度至少为 max(len1, len2)，所以剩余长度要足够
+            for len2 in range(1, n - len1 + 1):
+                # 前导零检查
+                if num[len1] == '0' and len2 > 1:
+                    break  # 第二个数以0开头，后面无需再试更长的
+
+                # 剩余长度至少能容纳第三个数
+                if n - len1 - len2 < max(len1, len2):
+                    break
+
+                # 提取前两个数
+                num1 = int(num[:len1])
+                num2 = int(num[len1:len1 + len2])
+
+                # 开始验证
+                start = len1 + len2
+                a, b = num1, num2
+                while start < n:
+                    c = a + b
+                    c_str = str(c)
+                    if not num.startswith(c_str, start):
+                        break
+                    start += len(c_str)
+                    a, b = b, c
+
+                if start == n:
+                    return True
+
+        return False
 def huihuan112__():   #快慢针：找环
     """
     给定一个包含 n + 1 个整数的数组 nums ，其数字都在 [1, n] 范围内（包括 1 和 n），可知至少存在一个重复的整数。
