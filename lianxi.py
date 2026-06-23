@@ -6182,5 +6182,33 @@ def shengming118__():
                     else:
                         board[i-1][j-1]=0
         return board
+def quchong123():   #单调栈
+    """
+    给你一个字符串 s ，请你去除字符串中重复的字母，使得每个字母只出现一次。需保证 返回结果的字典序最小（要求不能打乱其他字符的相对位置）。
+    示例 1：
+    输入：s = "bcabc"
+    输出："abc"
+    示例 2：
+    输入：s = "cbacdcbc"
+    输出："acdb"
+
+    提示：
+    1 <= s.length <= 10^4
+    s 由小写英文字母组成
+    """
+    def removeDuplicateLetters(s):
+        l = {j: i for i, j in enumerate(s)}
+        z = []
+        c = set()
+        for i in range(len(s)):
+            if s[i] in c:
+                continue
+            else:
+                while z and z[-1] > s[i] and l[z[-1]] > i:
+                    c.remove(z[-1])
+                    z.pop()
+                z.append(s[i])
+                c.add(s[i])
+        return ''.join(z)
 if __name__=='__main__':
     zuida84()
