@@ -6182,7 +6182,7 @@ def shengming118__():
                     else:
                         board[i-1][j-1]=0
         return board
-def quchong123():   #单调栈
+def quchong123__():   #单调栈
     """
     给你一个字符串 s ，请你去除字符串中重复的字母，使得每个字母只出现一次。需保证 返回结果的字典序最小（要求不能打乱其他字符的相对位置）。
     示例 1：
@@ -6210,5 +6210,49 @@ def quchong123():   #单调栈
                 z.append(s[i])
                 c.add(s[i])
         return ''.join(z)
+def zuida124__():   #位掩码
+    """
+    给你一个字符串数组 words ，找出并返回 length(words[i]) * length(words[j]) 的最大值，并且这两个单词不含有公共字母。如果不存在这样的两个单词，返回 0 。
+
+    示例 1：
+
+    输入：words = ["abcw","baz","foo","bar","xtfn","abcdef"]
+    输出：16
+    解释：这两个单词为 "abcw", "xtfn"。
+    示例 2：
+
+    输入：words = ["a","ab","abc","d","cd","bcd","abcd"]
+    输出：4
+    解释：这两个单词为 "ab", "cd"。
+    示例 3：
+
+    输入：words = ["a","aa","aaa","aaaa"]
+    输出：0
+    解释：不存在这样的两个单词。
+
+
+    提示：
+    2 <= words.length <= 1000
+    1 <= words[i].length <= 1000
+    words[i] 仅包含小写字
+    """
+    def maxProduct(self, words: List[str]) -> int:
+        a={'a':1,'b':2,'c':3,'d':4,'e':5,'f':6,'g':7,'h':8,
+        'i':9,'j':10,'k':11,'l':12,'m':13,'n':14,'o':15,'p':16,
+        'q':17,'r':18,'s':19,'t':20,'u':21,'v':22,'w':23,'x':24,'y':25,'z':26}
+        z=[]
+        for i in words:
+            b=0
+            for j in i:
+                b |=(1 << a[j])
+            z.append(b)
+        m=0
+        for i in range(len(words)-1):
+            for j in range(i+1,len(words)):
+                if z[i] & z[j] !=0:
+                    continue
+                else:
+                    m=max(m,len(words[i])*len(words[j]))
+        return m
 if __name__=='__main__':
     zuida84()
