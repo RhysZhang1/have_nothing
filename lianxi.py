@@ -5804,6 +5804,18 @@ def jida127():
     提示:
     2 <= n <= 58
     """
+    def integerBreak(self, n: int) -> int:
+        m=1
+        for i in range(2,n):
+            x=math.floor(n/i)
+            z=n-(i-1)*x
+            m=max(m,(x**(i-1))*z)
+            y=math.ceil(n/i)
+            z=n-(i-1)*y
+            if z<0:
+                continue
+            m=max(m,(y**(i-1))*z)
+        return m
 def huihuan112__():   #快慢针：找环
     """
     给定一个包含 n + 1 个整数的数组 nums ，其数字都在 [1, n] 范围内（包括 1 和 n），可知至少存在一个重复的整数。
