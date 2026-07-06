@@ -5859,6 +5859,45 @@ def zuidak128():
                 res.append(num)
                 if len(res) == k:
                     return res
+def chongfu129():
+    """
+    给你一个区间列表，请你删除列表中被其他区间所覆盖的区间
+    只有当 c <= a 且 b <= d 时，我们才认为区间 [a,b) 被区间 [c,d) 覆盖。
+    在完成所有删除操作后，请你返回列表中剩余区间的数目。
+
+    示例：
+    输入：intervals = [[1,4],[3,6],[2,8]]
+    输出：2
+    解释：区间 [3,6] 被区间 [2,8] 覆盖，所以它被删除了。
+
+    提示：
+    1 <= intervals.length <= 1000
+    0 <= intervals[i][0] < intervals[i][1] <= 10^5
+    对于所有的 i != j：intervals[i] != intervals[j]
+    """
+    def removeCoveredIntervals(intervals):
+        intervals.sort(key=lambda x:(x[0],-x[1]))
+        # d=[]
+        # for i in range(len(intervals)-1):
+        #     if i in d:
+        #         continue
+        #     for j in range(i+1,len(intervals)):
+        #         if j in d:
+        #             continue
+        #         if intervals[i][1]>=intervals[j][1]:
+        #             d.append(j)
+        #             continue
+        #         if intervals[i][1]<intervals[j][0]:
+        #             break
+        # return len(intervals)-len(d)
+        right = -1
+        covered = 0
+        for a, b in intervals:
+            if b <= right:
+                covered += 1
+            else:
+                right = b
+        return len(intervals) - covered
 def huihuan112__():   #快慢针：找环
     """
     给定一个包含 n + 1 个整数的数组 nums ，其数字都在 [1, n] 范围内（包括 1 和 n），可知至少存在一个重复的整数。
