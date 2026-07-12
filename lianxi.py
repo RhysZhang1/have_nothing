@@ -6431,7 +6431,7 @@ def zuida124__():   #位掩码
                 else:
                     m=max(m,len(words[i])*len(words[j]))
         return m
-def kuaisumi130():
+def kuaisumi130__():
     """
     你的任务是计算 ab 对 1337 取模，a 是一个正整数，b 是一个非常大的正整数且会以数组形式给出。
 
@@ -6471,4 +6471,70 @@ def kuaisumi130():
             z=(a**b_)%1337
         else:
             z=(a**m)%1337
+        return z
+def zuixiaodui131__():
+    """
+    给定两个以 非递减顺序排列 的整数数组 nums1 和 nums2 , 以及一个整数 k 。
+    定义一对值 (u,v)，其中第一个元素来自 nums1，第二个元素来自 nums2 。
+    请找到和最小的 k 个数对 (u1,v1),  (u2,v2)  ...  (uk,vk) 。
+    示例 1:
+    输入: nums1 = [1,7,11], nums2 = [2,4,6], k = 3
+    输出: [[1,2],[1,4],[1,6]]
+    解释: 返回序列中的前 3 对数：
+         [1,2],[1,4],[1,6],[7,2],[7,4],[11,2],[7,6],[11,4],[11,6]
+    示例 2:
+    输入: nums1 = [1,1,2], nums2 = [1,2,3], k = 2
+    输出: [[1,1],[1,1]]
+    解释: 返回序列中的前 2 对数：
+         [1,1],[1,1],[1,2],[2,1],[1,2],[2,2],[1,3],[1,3],[2,3]
+
+    提示:
+    1 <= nums1.length, nums2.length <= 10^5
+    -10^9 <= nums1[i], nums2[i] <= 10^9
+    nums1 和 nums2 均为 升序排列
+    1 <= k <= 104
+    k <= nums1.length * nums2.length
+    """
+    def kSmallestPairs(nums1, nums2, k):
+        # b=False
+        # if (k+1)%3==0:
+        #     b=True
+        # if b:
+        #     k+=1
+        # x1=0;x2=1
+        # z=[]
+        # for i in range(k):
+        #     if x2==1:
+        #         z.append([nums1[x1],nums2[x1]])
+        #         x2=2
+        #     elif x2==2:
+        #         z.append([nums1[x1],nums2[x1+1]])
+        #         x2=3
+        #     elif x2==3:
+        #         z.append([nums1[x1+1],nums2[x1]])
+        #         x2=1
+        #         x1+=1
+        # z.sort(key=lambda x:x[0]+x[1])
+        # if b:
+        #     z.pop()
+        # return z
+
+        # l1=len(nums1);l2=len(nums2)
+        # z=[]
+        # for i in range(l1):
+        #     for j in range(l2):
+        #         z.append([nums1[i],nums2[j]])
+        # z.sort(key=lambda x:x[0]+x[1])
+        # return z[:k]
+
+        import heapq  #堆：树形结构，（默认）小根堆：父节点的值<=子节点的值，堆并非完全排序，只保证堆顶最小
+        l1=len(nums1);l2=len(nums2)
+        z=[]
+        pq=[(nums1[i]+nums2[0],i,0) for i in range(min(k,l1))]
+        heapq.heapify(pq)   #把普通数字转化为堆
+        while pq and len(z)<k:
+            s,i,j,=heappop(pq)  #取出堆顶最小值
+            z.append([nums1[i],nums2[j]])
+            if j+1<l2:
+                heappush(pq,(nums1[i]+nums2[j+1],i,j+1))  #入堆
         return z
