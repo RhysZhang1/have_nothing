@@ -5898,6 +5898,34 @@ def chongfu129():
             else:
                 right = b
         return len(intervals) - covered
+def shunxu132():
+    """
+    我们定义「顺次数」为：每一位上的数字都比前一位上的数字大 1 的整数。
+    请你返回由 [low, high] 范围内所有顺次数组成的 有序 列表（从小到大排序）。
+    示例 1：
+    输出：low = 100, high = 300
+    输出：[123,234]
+    示例 2：
+    输出：low = 1000, high = 13000
+    输出：[1234,2345,3456,4567,5678,6789,12345]
+    提示：
+    10 <= low <= high <= 10^9
+    """
+    def sequentialDigits(low, high):
+        n=len(str(low))
+        x=len(str(high))
+        z=[]
+        s=['1','2','3','4','5','6','7','8','9']
+        for i in range(n,x+1):
+            for j in range(0,10-i):
+                num=int(''.join(s[j:j+i]))
+                if low<=num<=high:
+                    z.append(num)
+                elif num<low:
+                    continue
+                else:
+                    break
+        return z
 def huihuan112__():   #快慢针：找环
     """
     给定一个包含 n + 1 个整数的数组 nums ，其数字都在 [1, n] 范围内（包括 1 和 n），可知至少存在一个重复的整数。
