@@ -1798,3 +1798,157 @@ class Solution12:
         # 回溯得到的是从大到小的顺序，反转为从小到大
         result.reverse()
         return result
+
+class Solution13:
+    def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
+        """
+        给定两个大小分别为 m 和 n 的正序（从小到大）数组 nums1 和 nums2。请你找出并返回这两个正序数组的 中位数 。
+        算法的时间复杂度应该为 O(log (m+n)) 。
+
+        示例 1：
+        输入：nums1 = [1,3], nums2 = [2]
+        输出：2.00000
+        解释：合并数组 = [1,2,3] ，中位数 2
+        示例 2：
+        输入：nums1 = [1,2], nums2 = [3,4]
+        输出：2.50000
+        解释：合并数组 = [1,2,3,4] ，中位数 (2 + 3) / 2 = 2.5
+
+        提示：
+        nums1.length == m
+        nums2.length == n
+        0 <= m <= 1000
+        0 <= n <= 1000
+        1 <= m + n <= 2000
+        -10^6 <= nums1[i], nums2[i] <= 10^6
+        """
+        # ============================================================
+        # 算法：二分查找 + 划分位置（Partition-Based Binary Search）
+        # ============================================================
+        #
+        # 【核心思想】
+        # 中位数将有序数组分成两个等长（或差 1）的部分，左边所有元素 ≤ 右边所有元素。
+        # 对于两个有序数组，我们需要找到一个"划分线"，使得：
+        #   合并后左半部分的所有元素 ≤ 合并后右半部分的所有元素
+        #
+        # 但不用真正合并数组——只需确定每个数组贡献多少个元素到左半部分。
+        #
+        # 【问题转化】
+        # 设 m = len(A), n = len(B)，且保证 m ≤ n（在较短的数组上二分可最小化复杂度）。
+        # 合并后总长 total = m + n。
+        #
+        # 左半部分应包含 half = (m + n + 1) // 2 个元素。
+        # （无论总长度为奇偶，左半部分都取 ceil(total/2) 个元素，
+        #   奇数时中位数 = 左半部分最大值，偶数时 = (左半最大值 + 右半最小值) / 2）
+        #
+        # 设在数组 A 中取 i 个元素到左半部分，则数组 B 中取 j = half - i 个。
+        #
+        # 此时：
+        #   A 的左半最大值：A_left_max  = A[i-1]（若 i > 0）
+        #   A 的右半最小值：A_right_min = A[i]  （若 i < m）
+        #   B 的左半最大值：B_left_max  = B[j-1]（若 j > 0）
+        #   B 的右半最小值：B_right_min = B[j]  （若 j < n）
+        #
+        # 【合法条件】
+        # 划分合法 ⇔ A_left_max ≤ B_right_min 且 B_left_max ≤ A_right_min
+        # 即：A 左半的最大值 ≤ B 右半的最小值，且 B 左半的最大值 ≤ A 右半的最小值。
+        #
+        # 【二分搜索策略】
+        # 在 [0, m] 范围内二分搜索 i（A 中划入左半部分的元素个数）：
+        #
+        #   若 A_left_max > B_right_min：
+        #     → i 太大，A 中划入左半的太多 → 向左搜索：right = i - 1
+        #
+        #   若 B_left_max > A_right_min：
+        #     → i 太小，B 中划入左半的太多（等价于 A 中太少）→ 向右搜索：left = i + 1
+        #
+        #   否则（i 合法）：
+        #     → 找到正确的划分线！
+        #     → 若 total 为奇数：中位数 = max(A_left_max, B_left_max)
+        #     → 若 total 为偶数：中位数 = (max(左半) + min(右半)) / 2
+        #
+        # 【为什么在短数组上二分？】
+        # 对短数组 A 在 [0, m] 二分，搜索空间更小，复杂度为 O(log min(m,n))，
+        # 满足 O(log(m+n)) 的要求（实际上更优）。
+        #
+        # 【边界处理】
+        # 当 i = 0 时，A 没有元素划入左半，A_left_max  应视为 -∞（不影响 max 比较）。
+        # 当 i = m 时，A 全部划入左半，A_right_min 应视为 +∞（不影响 min 比较）。
+        # 同理处理 B 的 j = 0 和 j = n 边界。
+        #
+        # 【正确性验证】
+        # 示例 1：A=[1,3], B=[2]
+        #   m=2, n=1, total=3, half=2
+        #   二分 i ∈ [0,2]：
+        #     i=1: j=2-1=1, A_left=1, A_right=3, B_left=2, B_right=+∞
+        #           1 ≤ +∞ ✓, 2 ≤ 3 ✓ → 合法！
+        #           total 为奇数，中位数 = max(1,2) = 2 ✓
+        #
+        # 示例 2：A=[1,2], B=[3,4]
+        #   m=2, n=2, total=4, half=2
+        #   二分 i ∈ [0,2]：
+        #     i=1: j=2-1=1, A_left=1, A_right=2, B_left=3, B_right=4
+        #           1 ≤ 4 ✓, 3 ≤ 2 ✗ → B_left_max > A_right_min，i 太小 → right_search
+        #     i=2: j=2-2=0, A_left=2, A_right=+∞, B_left=-∞, B_right=3
+        #           2 ≤ 3 ✓, -∞ ≤ +∞ ✓ → 合法！
+        #           total 为偶数，左半最大值 = max(2, -∞) = 2
+        #                         右半最小值 = min(+∞, 3) = 3
+        #           中位数 = (2+3)/2 = 2.5 ✓
+        #
+        # 【复杂度】
+        #   - 时间：O(log min(m,n))，在最短短数组上二分，优于 O(log(m+n))
+        #   - 空间：O(1)，仅需常数个变量
+        # ============================================================
+
+        # ---- 确保 A 是较短的数组 ----
+        # 在短数组上二分可最小化搜索空间，保证 O(log min(m,n))
+        A, B = nums1, nums2
+        m, n = len(A), len(B)
+        if m > n:
+            # 交换，确保 A 更短
+            A, B = B, A
+            m, n = n, m
+
+        # ---- 二分搜索 ----
+        # 在 [0, m] 范围内搜索 i（A 中划入左半部分的元素个数）
+        half = (m + n + 1) // 2               # 左半部分应有的元素总数（ceil 除法）
+        left, right = 0, m                    # i 的搜索范围 [0, m]
+
+        while left <= right:
+            i = left + (right - left) // 2     # A 中划入左半的元素数
+            j = half - i                        # B 中划入左半的元素数
+
+            # ---- 四个边界值 ----
+            # A 左半最大值（若 i=0 则为 -∞，因为 A 中无元素在左半）
+            A_left = A[i - 1] if i > 0 else float('-inf')
+            # A 右半最小值（若 i=m 则为 +∞，因为 A 中无元素在右半）
+            A_right = A[i] if i < m else float('inf')
+            # B 左半最大值（若 j=0 则为 -∞）
+            B_left = B[j - 1] if j > 0 else float('-inf')
+            # B 右半最小值（若 j=n 则为 +∞）
+            B_right = B[j] if j < n else float('inf')
+
+            if A_left > B_right:
+                # A 左半的最大值比 B 右半的最小值还大
+                # → i 太大了，A 划入左半的元素过多 → 减少 i
+                right = i - 1
+            elif B_left > A_right:
+                # B 左半的最大值比 A 右半的最小值还大
+                # → i 太小了，需要从 A 中多划元素到左半 → 增大 i
+                left = i + 1
+            else:
+                # ---- 找到正确的划分 ----
+                # 满足：max(左半) ≤ min(右半)
+                left_max = max(A_left, B_left)
+                right_min = min(A_right, B_right)
+
+                if (m + n) % 2 == 1:
+                    # 奇数个元素：中位数 = 左半部分的最大值
+                    return float(left_max)
+                else:
+                    # 偶数个元素：中位数 = (左半最大值 + 右半最小值) / 2
+                    return (left_max + right_min) / 2.0
+
+        # 根据题目保证，合并数组非空，必然存在中位数
+        # 此处仅为完整性兜底，理论上不会到达
+        return 0.0
