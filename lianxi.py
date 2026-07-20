@@ -5926,6 +5926,48 @@ def shunxu132():
                 else:
                     break
         return z
+def yidong134():
+    """
+    给你一个 m 行 n 列的二维网格 grid 和一个整数 k。你需要将 grid 迁移 k 次。
+    每次「迁移」操作将会引发下述活动：
+    位于 grid[i][j]（j < n - 1）的元素将会移动到 grid[i][j + 1]。
+    位于 grid[i][n - 1] 的元素将会移动到 grid[i + 1][0]。
+    位于 grid[m - 1][n - 1] 的元素将会移动到 grid[0][0]。
+    请你返回 k 次迁移操作后最终得到的 二维网格。
+
+    示例 1：
+    输入：grid = [[1,2,3],[4,5,6],[7,8,9]], k = 1
+    输出：[[9,1,2],[3,4,5],[6,7,8]]
+    示例 2：
+    输入：grid = [[3,8,1,9],[19,7,2,5],[4,6,11,10],[12,0,21,13]], k = 4
+    输出：[[12,0,21,13],[3,8,1,9],[19,7,2,5],[4,6,11,10]]
+    示例 3：
+    输入：grid = [[1,2,3],[4,5,6],[7,8,9]], k = 9
+    输出：[[1,2,3],[4,5,6],[7,8,9]]
+
+    提示：
+    m == grid.length
+    n == grid[i].length
+    1 <= m <= 50
+    1 <= n <= 50
+    -1000 <= grid[i][j] <= 1000
+    0 <= k <= 100
+    """
+    def shiftGrid(grid, k):
+        m=len(grid)
+        n=len(grid[0])
+        grid_n=[[0 for i in range(n)] for j in range(m)]
+        for i in range(k):
+            for j in range(m):
+                for ii in range(n):
+                    if j==0 and ii==0:
+                        grid_n[j][ii]=grid[m-1][n-1]
+                    elif ii==0:
+                        grid_n[j][ii]=grid[j-1][n-1]
+                    else:
+                        grid_n[j][ii]=grid[j][ii-1]
+            grid=copy.deepcopy(grid_n)
+        return grid
 def huihuan112__():   #快慢针：找环
     """
     给定一个包含 n + 1 个整数的数组 nums ，其数字都在 [1, n] 范围内（包括 1 和 n），可知至少存在一个重复的整数。
